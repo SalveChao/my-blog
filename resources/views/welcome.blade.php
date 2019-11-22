@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
         <meta charset="utf-8">
@@ -8,6 +8,7 @@
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
+        <link rel="stylesheet" href="{{ mix('css/app.css') }}">
 
         <!-- Styles -->
         <style>
@@ -64,7 +65,7 @@
         </style>
     </head>
     <body>
-        <div class="flex-center position-ref full-height">
+        <div id="app" class="flex-center position-ref full-height">
             @if (Route::has('login'))
                 <div class="top-right links">
                     @auth
@@ -83,7 +84,8 @@
                 <div class="title m-b-md">
                     Laravel
                 </div>
-
+                    <favorite-component></favorite-component>
+                    <example-component></example-component>
                 <div class="links">
                     <a href="https://laravel.com/docs">Docs</a>
                     <a href="https://laracasts.com">Laracasts</a>
@@ -97,3 +99,6 @@
         </div>
     </body>
 </html>
+@section('script')
+<script src="{{ mix('js/app.js') }}"></script> 
+@endsection
