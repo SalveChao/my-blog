@@ -18,8 +18,8 @@
 	  </tbody>
   </table>
   </div>
-   <span class="pl-2">{{$post->created_at}}　コメント数：{{$post->comments->count()}}</span>
-  <example-component></example-component>
-</div>
+    <span class="pl-2"><like post-id="{{ json_encode($post->id) }}"></like></span>
+    <span class="pl-2">{{$post->created_at}}　コメント数：{{$post->comments->count()}}</span>
+　</div>
  @endforeach
 @endsection

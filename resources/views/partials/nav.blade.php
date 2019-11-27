@@ -4,8 +4,11 @@
                 <a class="navbar-brand" href="{{ url('/posts') }}">
                     {{ config('app.name', 'Laravel') }}
                 </a>
+                @if(Auth::check())
                 @if(!str_contains(url()->full(),'manage-posts'))
+                
                 <a href="{{ route('manage-posts.allposts') }}">管理画面</a>
+                @endif
                 @endif
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>

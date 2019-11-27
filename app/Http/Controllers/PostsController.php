@@ -80,13 +80,22 @@ class PostsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Post $post)
     {
-        $post = Post::find($id);
-        $comments =Comment::where('post_id', $id)->get();
+        $post->load('likes');   //eager load
+        $defaultCount = count($post->likes);
+        $defaultLiked = $post->likes->where('user_id', Auth::user()->id)->first();
+        
+            if(isset($defaultLiked)) {
+                $defaultLiked == false;
+            }else {
+                $defaultLiked == true;
+            }
+        
+        $comments =Comment::where('post_id', $post)->get();
         $archives_list = Archive::getArchiveList();
         $categories = Category::has('posts')->get();
-        return view('posts.show')->with('post', $post)->with('comments', $comments)->with('posts', Post::orderBy('created_at', 'desc')->paginate(5))->with('categories', $categories)->with('archives_list', $archives_list);
+        return view('posts.show')->with('post', $post)->with('comments', $comments)->with('posts', Post::orderBy('created_at', 'desc')->paginate(5))->with('categories', $categories)->with('archives_list', $archives_list)->with('defaultLiked', $defaultLiked)->with('defaultCount', $defaultCount);
     }
 
     /**
@@ -98,7 +107,7 @@ class PostsController extends Controller
     public function edit(Post $post)
     {
         // dd($post->categories->pluck('id')->toArray());
-        return view('manage-posts.create')->with('post', $post)->with('categories', Category::all());
+        return view('manage-posts.create')->with('post', $post)->with('categories', Category::all())->with('userAuth', $userAuth);
     }
 
     /**
@@ -124,25 +133,26 @@ class PostsController extends Controller
         return redirect(route('posts.index'));
     }
 
-    public function like($id) {
-        $post = Post::find($id);
+    public function like(Post $post, Request $request) {
 
         $like = Like::create([
-            'user_id' => Auth::id(),
+            'user_id' => $request->user_id,
             'post_id' => $post->id
         ]);
+        
+        $LikeCount = count(Like::where('post_id', $post->id)->get());
 
-        return Like::find($like->id);
+        return response()->json([]);
     }
 
-    public function unlike($id) {
-        $post = Post::find($id);
+    public function unlike(Post $post, Request $request) {
 
-        Like::where('user_id', Auth::id())
-            ->where('post_id', $post->id)
-            ->first()
-            ->delete();
-            return 1;
+        $like = Like::where('user_id', $request->user_id)
+            ->where('post_id', $post->id)->first();
+        $like->delete();    
+
+        $likeCount = count(Like::where('post_id', $post->id)->get());
+        return response()->json([]);
     }
 
     public function archives(Request $request)
@@ -150,25 +160,6 @@ class PostsController extends Controller
        $year = $request->year;
        $month = $request->month;
 
-       // $data['archive_name'] = 'Archives from '.$year.', '.$month;
-
-        // if ($year) {
-        //     if ($month) {
-        //         // 月の指定がある場合はその月の1日を設定し、Carbonインスタンスを生成
-        //         $start_date = Carbon::createFromDate($year, $month, 1);
-        //         $end_date   = Carbon::createFromDate($year, $month, 1)->addMonth();     // 1ヶ月後
-        //     } else {
-        //         // 月の指定が無い場合は1月1日に設定し、Carbonインスタンスを生成
-        //         $start_date = Carbon::createFromDate($year, 1, 1);
-        //         $end_date   = Carbon::createFromDate($year, 1, 1)->addYear();           // 1年後
-        //     }
-        //     $query->where('post_date', '>=', $start_date->format('Y-m-d'))
-        //           ->where('post_date', '<',  $end_date->format('Y-m-d'));
-        // }
-
-        //monthとyearで結果をふるい分けている
-       //Carbon::parse($data)->format('d F, Y')　の形式で引数をパースする。ここではDecemberを１２として表示させている。
-       // whereMonthなどはtimestamp型カラムから年月日検索が可能な既存メソッド
        $articles = Post::latest();
        $articles->whereMonth('created_at', Carbon::parse($month)->month);
        $articles->whereYear('created_at', $year);       //連想配列のキーpostsに５つの記事を代入

@@ -8,9 +8,8 @@
 	<table class="table table-sm">
 		<thead>
 			<th>グラバター</th>
-			<th></th>
+			<th>名前</th>
 			<th>役割</th>
-			<th>コメント</th>
 			<th>権限</th>
 		</thead>
 		<tbody>
@@ -19,13 +18,16 @@
 				<td><img width="25px" height="25px" style="border-radius: 50%;" src="{{ Gravatar::src($user->email) }}" alt=""></td>
 				<td>{{ $user->name }}</td>
 				<td>{{ $user->role }}</td>
-				<td>何か</td>
 				<td>
-					@if(!$user->isInitiator())
-					<form action="{{ route('users.make-admin', $user->id) }}" class="btn btn-info " method="POST">
-						@csrf
-					管理者権限付与
+					@if($user->role !== 'admin'  && !Auth()->user())
+					<form action="{{ route('users.make-admin', ['id' => $user->id]) }}" method="POST">
+					@csrf
+					<button type="submit" class="btn btn-success btn-sm">管理者権限付与</button>
 					</form>
+					@elseif($user->role == 'admin')
+					管理者
+					@else
+					なし
 					@endif
 				</td>
 			</tr>

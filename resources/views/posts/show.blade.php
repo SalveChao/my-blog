@@ -26,7 +26,12 @@
 	    		{{ $category->name }}
 		    	</a>
 	    		@endforeach
-		    	<init></init>
+		    	<like 
+		    	:post-id="{{json_encode($post->id) }}"
+		    	:user-id="{{json_encode(Auth::user()->id) }}"
+		    	:default-Liked="{{json_encode($defaultLiked) }}"
+		    	:default-Count="{{ json_encode($defaultCount) }}"
+		    	></like>
 	    	</span>
 	    </div>
 

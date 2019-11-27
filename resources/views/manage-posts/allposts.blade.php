@@ -32,7 +32,7 @@
 </div>
 @if($posts->count()>0)
 <div class="card-body">
-	<button class="btn btn-danger btn-sm delete-all mb-2" data-url="">一括削除</button>
+	<button class="btn btn-danger btn-sm delete-all mb-2" data-url="">一括ゴミ箱</button>
 	<table class="table table-sm">
 		<thead>
 			<th><input type="checkbox" id="check_all"></th>
@@ -53,8 +53,8 @@
 				<td>
 					<span><a href="{{ route('posts.show', [$post->id]) }}" class="btn btn-info btn-sm">表示</a></span>
 					<span><a href="{{ route('manage-posts.edit', [$post->id]) }}" class="btn btn-warning btn-sm">編集</a></span>
-					<button　type="submit"  class="btn btn-danger btn-sm" onclick="handleDelete({{ $post->id }})">
-					 <i class="fa fa-trash" aria-hidden="true"></i>
+					<button　type="submit"  class="btn btn-danger btn-sm" onclick="handleDelete({{ $post->id }})" style="color: black;">
+                    ゴミ
 					</button>
 				</td>
 			</tr>
@@ -108,7 +108,7 @@
             alert("最低1つ選択してください。.");
         }  else {
 
-            if(confirm("指定の記事を一括削除しますか？")){
+            if(confirm("指定の記事をゴミ箱へ移動しますか？")){
 
                 var strIds = idsArr.join(",");
 

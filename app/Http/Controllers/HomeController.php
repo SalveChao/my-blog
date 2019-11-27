@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Post;
 use App\Category;
 use Auth;
-
+use App\Models\Archive;
 
 class HomeController extends Controller
 {
@@ -29,9 +29,9 @@ class HomeController extends Controller
     {
         $posts = Post::orderBy('created_at', 'desc')->paginate(5);
         $categories =Category::all();
-
-        if(!Auth::user()->role == 'Initiator'){
-        return view('home')->with('posts', $posts)->with('categories', $categories);
+        $archives_list = Archive::getArchiveList();
+        if(Auth::user()->role !== 'Admin'){
+        return view('/posts/index')->with('posts', $posts)->with('categories', $categories)->with('archives_list', $archives_list);
         } else {
         return view('manage-posts/allposts')->with('posts', $posts)->with('categories', $categories);
         }

@@ -47,14 +47,12 @@
                             <tr><td><a href="{{ route('manage-posts.allposts') }}">投稿管理</a></td></tr>
                             <tr><td><a href="{{ route('categories.index') }}">カテゴリ</a></td></tr>
                             <tr>
-                                @if(auth()->user()->isInitiator())
                                 <td><a href="{{ route('users.index') }}">ユーザー</a></td>
-                                @endif
                             </tr>
                             <tr>
-                                @if(auth()->user()->isInitiator())
+
                                 <td><a href="{{ route('comments.index') }}">コメント</a></td>
-                                @endif
+                                
                             </tr>
                             <tr><td><a href="{{ route('trashed-posts') }}" class="list-group mt-5">ゴミ箱</a></td></tr>
                         </table>

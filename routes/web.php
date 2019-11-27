@@ -31,8 +31,8 @@ Route::get('get_auth_user_data', function() {
   return Auth::user();
 });
 
-//Initiator
-Route::middleware(['auth', 'initiator'])->group(function () {
+//Admin
+Route::middleware(['auth'])->group(function () {
 
 	Route::get('/home', 'HomeController@index')->name('home');
 
@@ -69,7 +69,7 @@ Route::group(['middleware' => ['auth']], function () {
 
 	Route::get('users/profile', 'UsersController@edit')->name('users.edit-profile');
 	Route::put('users/profile', 'UsersController@update')->name('users.update-profile');
-	Route::get('/like/{id}', 'PostsController@like');
-	Route::get('/unlike/{id}', 'PostsController@unlike');
+	Route::post('/posts/{post}/Like', 'PostsController@like');
+	Route::post('/posts/{post}/unlike', 'PostsController@unlike');
 	Route::get('try', function() {return App\Post::with('user', 'likes')->get();});
 });
