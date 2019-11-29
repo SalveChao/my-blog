@@ -6,6 +6,8 @@
 
 @section('content')
 
+<div class="nav navbar navbar-light text-center font-weight-bold" style="background-color: #e3f2fd;">カテゴリ：{{ $category->name }}</div>
+
 @foreach($category->posts as $post)
 <div class="card mb-1">
   <div card class="card-header">
@@ -18,8 +20,8 @@
 	  </tbody>
   </table>
   </div>
-    <span class="pl-2"><like post-id="{{ json_encode($post->id) }}"></like></span>
-    <span class="pl-2">{{$post->created_at}}　コメント数：{{$post->comments->count()}}</span>
+  <hr>
+    <span class="pl-3 pb-2">{{$post->created_at}}　コメント数：{{$post->comments->count()}}</span>
 　</div>
  @endforeach
 @endsection

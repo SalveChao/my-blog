@@ -19,7 +19,9 @@ class CategoriesController extends Controller
      */
     public function index()
     {
-        return view('manage-posts/categories_index')->with('categories', Category::all());
+        return view('manage-posts/categories_index')
+            ->with('categories', Category::all())
+            ;
     }
 
     /**
@@ -67,7 +69,6 @@ class CategoriesController extends Controller
      */
     public function edit(Category $category)
     {
-
         return view('manage-posts/category_create')->with('category', $category);
     }
 
@@ -78,10 +79,8 @@ class CategoriesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(CreateCategoryRequest $request, $id)
+    public function update(CreateCategoryRequest $request, Category $category)
     {
-
-        $category = Category::find($id);
         $category->name = $request->name;
         $category->save();
         session()->flash('success', '更新しました');
@@ -120,8 +119,17 @@ class CategoriesController extends Controller
     public function category($post_id)
     {
         $category = Category::find($post_id);
-        $posts = Post::all();
+        
+        $builder = Post::withCount('comments')->orderBy('created_at', 'desc');
+        $posts = $builder->simplepaginate(5);
+        $feeds = $builder->take(5)->get();
+        
         $archives_list = Archive::getArchiveList();
-        return view('posts/category')->with('category', $category)->with('posts', $posts)->with('categories',Category::has('posts')->get())->with('archives_list', $archives_list);
+        return view('posts/category')
+            ->with('category', $category)
+            ->with('posts', $posts)
+            ->with('categories',Category::has('posts')->get())
+            ->with('archives_list', $archives_list)
+            ->with('feeds', $feeds);
     }
 }

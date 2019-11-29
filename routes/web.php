@@ -45,7 +45,7 @@ Route::middleware(['auth'])->group(function () {
 	Route::resource('/manage-posts/categories', 'CategoriesController',['except' =>['index', 'create', 'edit']]);
 	Route::get('manage-posts/categories_index', 'CategoriesController@index')->name('categories.index');
 	Route::get('manage-posts/category_create', 'CategoriesController@create')->name('categories.create');
-	Route::put('manage-posts/category_edit', 'CategoriesController@edit')->name('categories.edit');
+	Route::get('manage-posts/{category}/category_edit', 'CategoriesController@edit')->name('categories.edit');
 	//users
 	Route::get('manage-posts/users', 'UsersController@index')->name('users.index');
 	Route::post('manage-posts/users.{user}/make-admin', 'UsersController@makeAdmin')->name('users.make-admin');

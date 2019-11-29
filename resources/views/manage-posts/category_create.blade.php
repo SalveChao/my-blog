@@ -8,7 +8,7 @@
     </div>
     <div class="card-body">
     @include('partials.errors')
-        <form action="{{ isset($category) ? route('categories.update', $category->id) : route('categories.store') }}" method="POST">
+        <form action="{{ isset($category) ? route('categories.update', $category->id) : route('categories.store') }}"  method="POST">
             @csrf
             @if(isset($category))
             @method('PUT')

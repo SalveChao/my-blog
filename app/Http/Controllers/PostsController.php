@@ -10,12 +10,11 @@ use App\Category;
 use App\Post;
 use App\Models\Archive;
 use App\Comment;
-use Carbon\Carbon;
+// use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Like;
 use App\Http\Middleware\RedirectIfAuthenticated;
-
 
 class PostsController extends Controller
 {
@@ -24,12 +23,17 @@ class PostsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
-        $posts = Post::withCount('comments')->orderBy('created_at', 'desc')->paginate(5);
+        $builder = Post::withCount('comments')->orderBy('created_at', 'desc');
+        $posts = $builder->paginate(5);
+        $feeds = $builder->take(5)->get();
+        // $feeds = DB::table('posts')->latest()->get(5);
+        
         $archives_list = Archive::getArchiveList();
         $categories = Category::has('posts')->get();
-        return view('posts.index')->with('posts', $posts)->with('categories', $categories)->with('archives_list', $archives_list);
+        return view('posts.index', 
+            compact('posts', 'feeds', 'categories', 'archives_list'));
     }
 
     /**
@@ -39,7 +43,8 @@ class PostsController extends Controller
      */
     public function create()
     {
-        return view('manage-posts.create')->with('categories', Category::all());
+        return view('manage-posts.create')
+            ->with('categories', Category::all());
     }
 
     /**
@@ -84,18 +89,27 @@ class PostsController extends Controller
     {
         $post->load('likes');   //eager load
         $defaultCount = count($post->likes);
-        $defaultLiked = $post->likes->where('user_id', Auth::user()->id)->first();
-        
+
+        $defaultLiked = $post->likes->where('user_id', Auth::id())->first();        
+        if($post->user_id == Auth::id()) {
+
             if(isset($defaultLiked)) {
                 $defaultLiked == false;
             }else {
                 $defaultLiked == true;
             }
+        }
         
-        $comments =Comment::where('post_id', $post)->get();
+        $comments =Comment::where('post_id', $post->id)->get();
         $archives_list = Archive::getArchiveList();
         $categories = Category::has('posts')->get();
-        return view('posts.show')->with('post', $post)->with('comments', $comments)->with('posts', Post::orderBy('created_at', 'desc')->paginate(5))->with('categories', $categories)->with('archives_list', $archives_list)->with('defaultLiked', $defaultLiked)->with('defaultCount', $defaultCount);
+        
+        $builder = Post::withCount('comments')->orderBy('created_at', 'desc');
+        $posts = $builder->simplepaginate(5);
+        $feeds = $builder->latest()->get(5);
+
+        return view('posts.show', 
+            compact('post', 'posts', 'feeds','comments', 'categories', 'archives_list', 'defaultLiked', 'defaultCount'));
     }
 
     /**
@@ -157,18 +171,27 @@ class PostsController extends Controller
 
     public function archives(Request $request)
     {
-       $year = $request->year;
-       $month = $request->month;
-
-       $articles = Post::latest();
-       $articles->whereMonth('created_at', Carbon::parse($month)->month);
-       $articles->whereYear('created_at', $year);       //連想配列のキーpostsに５つの記事を代入
-       $data['articles'] = $articles->paginate(5);
+        $year = $request->year;
+        $month = $request->month;
+        $year_month = $request->year_month = sprintf("%04d年%02d月", $year, $month);
+        
+        $articles = Post::latest();
+        $articles->whereMonth('created_at', $month);        //, Carbon::parse($month)->month
+        $articles->whereYear('created_at', $year);       //連想配列のキーpostsに５つの記事を代入
+        $data['articles'] = $articles->paginate(5);
 
        //サイドバーアーカイブ用のデータをモデルから引っ張っている
-       $archives_list = Archive::getArchiveList();
-       $posts = Post::orderBy('created_at', 'desc')->take(5)->get();
+        $archives_list = Archive::getArchiveList();
+        
+        //feed用
+        $builder = Post::withCount('comments')->orderBy('created_at', 'desc');
+        $posts = $builder->simplepaginate(5);
+        $feeds = $builder->take(5)->get();
+        
         $categories = Category::has('posts')->get();
-       return view('posts/archives')->with('data', $data['articles'])->with('archives_list', $archives_list)->with('categories',$categories)->with('posts', $posts)->with('articles', $articles);
+        
+        return view('posts/archives', 
+        compact('archives_list', 'categories', 'posts', 'articles', 'feeds', 'year', 'month', 'year_month'))
+          ->with('data', $data['articles']);
     }
 }

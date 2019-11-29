@@ -13,10 +13,13 @@ class Archive extends Model
       //グループ化し。year,monthname post_countカラムを持つレコードを表示
        $archives_list = DB::table('posts')
             ->whereNull('deleted_at')
-            ->selectRaw('year(created_at) as year,month(created_at) as month, monthname(created_at) as monthname, COUNT(*) post_count')
+            ->selectRaw(
+                'year(created_at) as year,
+                month(created_at) as month, 
+                COUNT(*) as post_count'
+            )
             ->groupBy('year')
             ->groupBy('month')
-            ->groupBy('monthname')
             ->orderBy('year', 'desc')
             ->orderBy('month', 'desc')
             ->get();
@@ -28,7 +31,6 @@ class Archive extends Model
             $value->year_month = sprintf("%04d年%02d月", $year, $month);
             //(format[d=整数値, s=文字列],文字1, 文字2)
         }
-
         return $archives_list;
       }
 }

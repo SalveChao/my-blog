@@ -19,7 +19,7 @@
 				<td>{{ $user->name }}</td>
 				<td>{{ $user->role }}</td>
 				<td>
-					@if($user->role !== 'admin'  && !Auth()->user())
+					@if($user->role !== 'admin'  && $user !==Auth()->user())
 					<form action="{{ route('users.make-admin', ['id' => $user->id]) }}" method="POST">
 					@csrf
 					<button type="submit" class="btn btn-success btn-sm">管理者権限付与</button>

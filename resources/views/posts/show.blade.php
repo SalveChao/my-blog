@@ -13,13 +13,16 @@
 	<div card class="card-header"><h2>{{ $post->title }}</h2></div>
 	<div class="card-body">
 		<table class="table">
-			<tbody><tr><td>{!! $post->content !!}</td></tr></tbody>
+			<tbody>
+				@if($post->image)
+				<tr><td class="text-center"><img src="{{ asset('/storage/'.$post->image) }}" style="max-width: 200px;"></td></tr>
+				@endif
+				<tr><td>{!! $post->content !!}</td></tr>
+			</tbody>
 		</table>
-		<div><a  href=""><img class="img-fluid" src="{{ Storage::url($post->image) }}"></a></div>
-		<br>
-
-	    <div class="panel-footer">
-	    	<span class="pr-2">投稿：{{ $post->created_at }}</span>
+	</div>	
+	<div class="card-footer">
+	    <span class="pr-2">投稿：{{ $post->created_at }}</span>
 			カテゴリ:<span class="btn btn-sm ">
 	    		@foreach($post->categories as $category)
 	    		<a href="{{ route('category.single', ['id' => $category->id]) }}">
@@ -28,14 +31,12 @@
 	    		@endforeach
 		    	<like 
 		    	:post-id="{{json_encode($post->id) }}"
-		    	:user-id="{{json_encode(Auth::user()->id) }}"
-		    	:default-Liked="{{json_encode($defaultLiked) }}"
-		    	:default-Count="{{ json_encode($defaultCount) }}"
+		    	:user-id="{{json_encode(Auth::id()) }}"
+		    	:default-liked="{{json_encode($defaultLiked) }}"
+		    	:default-count="{{ json_encode($defaultCount) }}"
 		    	></like>
 	    	</span>
 	    </div>
-
-　　</div>
 </div>
 @include('partials.comments')
 @endsection

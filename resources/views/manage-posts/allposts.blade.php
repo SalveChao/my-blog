@@ -38,7 +38,6 @@
 			<th><input type="checkbox" id="check_all"></th>
 			<th>タイトル</th>
 			<th>コメント</th>
-			<th>閲覧数</th>
 			<th>公開日</th>
 			<th>操作</th>
 		</thead>
@@ -48,7 +47,6 @@
 				<td><input type="checkbox" class="checkbox" data-id="{{ $post->id }}"></td>
 				<td>{{ $post->title }}</td>
 				<td>{{ $post->comments()->count() }}</td>
-				<td>閲覧数</td>
 				<td>{{ ($post->created_at)->format('Y/m/d') }}</td>
 				<td>
 					<span><a href="{{ route('posts.show', [$post->id]) }}" class="btn btn-info btn-sm">表示</a></span>

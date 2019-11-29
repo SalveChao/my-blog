@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\User;
 use Illuminate\Http\Request;
-use App\Http\Requests\Users\UsersProfileRequest;
 
 class UsersController extends Controller
 {
@@ -26,7 +25,7 @@ class UsersController extends Controller
     	return view('users.edit')->with('user', auth()->user());	//ログインユーザー
     }
 
-    public function update(UsersProfileRequest $request)
+    public function update(Request $request)
     {
     	$user = auth()->user();
     	$user->update([

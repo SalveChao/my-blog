@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">プロフィール</div>
+                <div class="card-header">メモ</div>
 
                 <div class="card-body">
                     @include('partials.errors')
@@ -13,8 +13,7 @@
                         @csrf
                         @method('PUT')
                         <div class="form-group">
-                            <label for="name">名前</label>
-                            <input type="text" class="form-control" name="name" id="name" value="{{ $user->name }}">
+                            {{ $user->name }}さん
                         </div>
                         <div class="form-group">
                             <label for="about"></label>

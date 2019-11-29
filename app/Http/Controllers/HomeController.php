@@ -27,13 +27,17 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $posts = Post::orderBy('created_at', 'desc')->paginate(5);
+        $builder = Post::withCount('comments')->orderBy('created_at', 'desc');
+        $posts = $builder->paginate(5);
+        $feeds = $builder->latest()->get(5);
+
+        
         $categories =Category::all();
         $archives_list = Archive::getArchiveList();
         if(Auth::user()->role !== 'Admin'){
-        return view('/posts/index')->with('posts', $posts)->with('categories', $categories)->with('archives_list', $archives_list);
+        return view('/posts/index')->with('posts', $posts)->with('feeds', $feeds)->with('categories', $categories)->with('archives_list', $archives_list);
         } else {
-        return view('manage-posts/allposts')->with('posts', $posts)->with('categories', $categories);
+        return view('manage-posts/allposts')->with('posts', $posts)->with('feeds', $feeds)->with('categories', $categories);
         }
     }
 }

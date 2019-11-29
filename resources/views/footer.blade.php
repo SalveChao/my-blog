@@ -4,7 +4,7 @@
                     <!-- Grid column -->
                     <div>
                         <!-- Copyright -->
-                        <div class="text-center pt-2">© 2019 Copyright: MDBlog</div>
+                        <div class="text-center pt-2">© 2019 Copyright: MyBlog</div>
                 　　</div>
             </div>
         </footer>

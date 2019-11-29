@@ -29,8 +29,8 @@
 			<label for="image" class="my-1">画像</label>
 			<input type="file" class="form-control" name="image" id="image">
 			</input>
-			@isset($post)
-				<p><img class="mt-2" src="{{ Storage::url($post->image) }}" width="50%"></p>
+			@isset($post->image)
+				<p><img class="mt-2" src="{{ asset('/storage/' .$post->image) }}" width="25%"></p>
 			@endisset
 		</div>
 		<div class="form-row">
