@@ -16,7 +16,6 @@ class Archive extends Model
             ->selectRaw('
                 extract(year from created_at) as year,
                 extract(month from created_at) as month,
-                // month("created_at" without time zone) as month, 
                 COUNT(*) as post_count
             ')
             ->groupBy('year')
