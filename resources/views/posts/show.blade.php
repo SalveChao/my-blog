@@ -29,7 +29,7 @@
 	    		{{ $category->name }}
 		    	</a>
 	    		@endforeach
-		    	<like 
+		    	<like class="btn btn-sm ml-2"
 		    	:post-id="{{json_encode($post->id) }}"
 		    	:user-id="{{json_encode(Auth::id()) }}"
 		    	:default-liked="{{json_encode($defaultLiked) }}"

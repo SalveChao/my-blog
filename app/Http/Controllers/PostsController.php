@@ -14,7 +14,7 @@ use App\Comment;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Like;
-use App\Http\Middleware\RedirectIfAuthenticated;
+use App\Http\Middleware\RedirectIfAuthenticated;    //He
 
 class PostsController extends Controller
 {

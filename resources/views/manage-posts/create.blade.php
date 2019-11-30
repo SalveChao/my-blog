@@ -66,9 +66,10 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/trix/1.2.0/trix.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 	<script>
-		flatpickr('#published_at', {enableTime: true})
-		$(document).ready(function() {
-    		$('.categories-selector').select2();
+		import flatpickr from "flatpickr";
+		flatpickr('#published_at', {enableTime: true});
+		 (document).ready(function() {
+    	 ('.categories-selector').select2();
 		});
 	</script>
 @endsection
