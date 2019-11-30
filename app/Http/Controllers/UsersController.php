@@ -9,7 +9,8 @@ class UsersController extends Controller
 {
     public function index()
     {
-    	return view('users.index')->with('users', User::all());
+    	return view('users.index')
+    	    ->with('users', User::all());
     }
 
     public function makeAdmin(User $user)
@@ -22,14 +23,14 @@ class UsersController extends Controller
 
     public function edit()
     {
-    	return view('users.edit')->with('user', auth()->user());	//ログインユーザー
+    	return view('users.edit')
+    	    ->with('user', auth()->user());	//ログインユーザー
     }
 
     public function update(Request $request)
     {
     	$user = auth()->user();
     	$user->update([
-            'name' => $request->name,
             'about' => $request->about
     	]);
     	session()->flash('success', '更新しました');

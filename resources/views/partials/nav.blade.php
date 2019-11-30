@@ -2,7 +2,7 @@
 <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/posts') }}">
-                    {{ config('app.name', 'Laravel') }}
+                    {{ config('app.name', 'Myblog') }}
                 </a>
                 @if(Auth::check())
                 @if(!str_contains(url()->full(),'manage-posts'))
