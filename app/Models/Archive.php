@@ -16,7 +16,7 @@ class Archive extends Model
             ->selectRaw('
                 year("created_at") as year,
                 month("created_at") as month, 
-                COUNT(*) as post_count
+                COUNT("*") as post_count
             ')
             ->groupBy('year')
             ->groupBy('month')
