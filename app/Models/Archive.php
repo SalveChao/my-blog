@@ -14,8 +14,8 @@ class Archive extends Model
        $archives_list = DB::table('posts')
             ->whereNull('deleted_at')
             ->selectRaw('
-                year(created_at) as year,
-                month(created_at) as month, 
+                year("created_at") as year,
+                month("created_at") as month, 
                 COUNT(*) as post_count
             ')
             ->groupBy('year')
