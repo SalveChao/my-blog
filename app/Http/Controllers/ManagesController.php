@@ -125,13 +125,13 @@ class ManagesController extends Controller
         // $comments = Comment::where('post_id', $id)->get();
         $comments = Post::find($id)->comments()->where('post_id', $id)->get();
 
-        //trashed()メソッドはソフトデリートされているかの確認(softdeleteされていれば完全削除、下がまだソフトデリートされていない)
+        //trashed()メソッドはソフトデリートされているかの確認(softdeleteされていれば完全削除)
         if ($post->trashed()) {
             $comments->delete();
             $post->deleteImage();  //フォルダからもimgを削除
             $post->forceDelete();
-        } else {
-            if($comments) {
+        } else {                //まだソフトデリートされていない
+            if($comments) {         
                 foreach($comments as $comment) {
                     $comment->post()->dissociate($post);
                 }

@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+
 <div class="text-right">
   <a href="{{ route('categories.create') }}" class="btn btn-success btm-sm mb-2 mr-1 text-right">カテゴリ追加</a>
 </div>
@@ -24,7 +25,14 @@
   				<td>{{ $category->name }}</td>
           <td>{{ $category->posts->count() }}</td>
           <td><a href="{{ route('categories.edit', $category->id) }}" class="btn btn-warning btn-sm">編集</a></td>
-          <td><button class="btn btn-danger btn-sm" onclick="handleDelete({{ $category->id }})">削除</button></td>
+          <td>
+              <form method="post" action="{{ route('categories.destroy', $category->id) }}">
+                  @csrf
+                  @method('DELETE')
+              <button type="submit" class="btn btn-danger btn-sm">削除</button>                  
+              </form>
+
+          </td>
   			</tr>
   			@endforeach
 		</tbody>
@@ -34,39 +42,12 @@
         @endif
     </div>
 </div>
-<!-- Modal -->
-<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <form action="" method="POST" id="deleteCategoryForm">
-    @csrf
-    @method('DELETE')
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="deleteModalLabel">削除</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        削除します。よろしいですか？
-      </div>
-      <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">閉じる</button>
-          <button  type="submit" class="btn btn-primary">削除</button>
-      </div>
-     </div>
-     </form>
-  </div>
-</div>
+
 @endsection
 
 @section('scripts')
  <script>
- 	function handleDelete(id){
-    var form = document.getElementById('deleteCategoryForm')
-    form.action = 'manage-posts/categories/' + id
- 		$('#deleteModal').modal('show')
- 	}
+ 	//一括削除
       $(document).ready(function () {
 
         $('#check_all').on('click', function(e) {

@@ -15,7 +15,7 @@
         </button>
       </div>
       <div class="modal-body">
-				削除します。よろしいですか？
+	    削除します。よろしいですか？
       </div>
       <div class="modal-footer">
 	        <button type="button" class="btn btn-secondary" data-dismiss="modal">閉じる</button>

@@ -93,15 +93,17 @@ class CategoriesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Category $category)
+    public function destroy($id)
     {
+        $category = Category::find($id);
         if ($category->posts->count() > 0) {
             session()->flash('error', '記事に使われているため削除不可能');
+            return back();
+        } else {
+            $category->delete();
+            session()->flash('success', '削除しました');
             return redirect(route('categories.index'));
         }
-        $category->delete();
-        session()->flash('success', '削除しました');
-        return redirect(route('categories.index'));
     }
 /**
 * カテゴリ一括削除機能
